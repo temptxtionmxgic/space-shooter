@@ -45,7 +45,13 @@ function keyDownHandler (event:KeyboardEvent):void
             break;
         case Keyboard.RIGHT:
             right = true;
-            break;
+		case Keyboard.SPACE:    
+		     spaceBar = true;    
+			 break;		
+        case Keyboard.SPACE:    
+			spaceBar = false;    
+			break;
+		
     }
 }
 function keyUpHandler(event:KeyboardEvent):void
@@ -64,35 +70,24 @@ function keyUpHandler(event:KeyboardEvent):void
         case Keyboard.RIGHT:
             right = false;
             break;
-		case Keyboard.SPACE:
-    spaceBar = true;
-    break;
-		case Keyboard.SPACE:
-    spaceBar = false;
-    break;
     }
 }
 function playerMovement(event:Event):void
 {
-    // if(left is true and right is not true ... AND within stage
     if ( left && !right && player_mc.x > 0) 
     {
         player_mc.x -= speed;
     }
 
-    //if(right is true and left is not true) ... AND within stage
     if( right && !left && player_mc.x < stage.stageWidth) 
     {
         player_mc.x += speed;
     }
-
-    //if(up is true and down is not true) ... AND within stage
     if( up && !down && player_mc.y > 0) 
     {
         player_mc.y -= speed;
     }
 
-    // if(down is true and up is not true) ... AND within stage
     if( down && !up && player_mc.y < stage.stageHeight) 
     {
         player_mc.y += speed;
@@ -106,3 +101,41 @@ function playerMovement(event:Event):void
 
 }
 }
+
+function addBullet(startX, startY):void
+{
+    //declare an object instance from the bullet Class
+    var b:Bullet = new Bullet();
+
+    //set the new bullet's x-y coordinates
+    b.x = startX;
+    b.y = startY;
+
+    //add the new bullet to the stage
+    stage.addChild(b);
+
+    //store the object in an array
+    bullets_arr.push(b);
+}
+
+function moveBullet():void
+{
+    //loop through all instances of the bullet
+    //loop from '0' to 'number_of_bullets'
+    for (var i:int = 0; i < bullets_arr.length; i++)
+    {
+        //move the bullet
+        bullets_arr[i].x += bulletSpeed;
+
+        //if the bullet flies off the screen, remove it
+        if(bullets_arr[i].x > stage.stageWidth)
+        {
+            //remove the bullet from the stage
+            stage.removeChild(bullets_arr[i]);
+
+            //remove the bullet from the array
+            bullets_arr.removeAt(i);
+        }
+    }
+}
+
