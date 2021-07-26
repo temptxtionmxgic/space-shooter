@@ -1,0 +1,108 @@
+var up:Boolean;
+var down:Boolean;
+var left:Boolean;
+var right:Boolean;
+
+var spaceBar:Boolean = false;
+
+var bulletSpeed:int = 15;
+var bullets_arr:Array = [];
+var cooldown: int = 0;
+var speed:int;
+
+initialise();
+
+function initialise():void
+{
+    up = false;
+    down = false;
+    left = false;
+    right = false;
+
+ 
+    speed = 8;
+spaceBar = false;
+
+bulletSpeed = 15;
+bullets_arr = [];
+cooldown = 0;
+    stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
+    stage.addEventListener(KeyboardEvent.KEY_UP, keyUpHandler);
+    stage.addEventListener(Event.ENTER_FRAME, playerMovement);
+}
+function keyDownHandler (event:KeyboardEvent):void
+{
+    switch( event.keyCode )
+    {
+        case Keyboard.UP:
+            up = true;
+            break;
+        case Keyboard.DOWN:
+            down = true;
+            break;
+        case Keyboard.LEFT:
+            left = true;
+            break;
+        case Keyboard.RIGHT:
+            right = true;
+            break;
+    }
+}
+function keyUpHandler(event:KeyboardEvent):void
+{
+    switch( event.keyCode )
+    {
+        case Keyboard.UP:
+            up = false;
+            break;
+        case Keyboard.DOWN:
+            down = false;
+            break;
+        case Keyboard.LEFT:
+            left = false;
+            break;
+        case Keyboard.RIGHT:
+            right = false;
+            break;
+		case Keyboard.SPACE:
+    spaceBar = true;
+    break;
+		case Keyboard.SPACE:
+    spaceBar = false;
+    break;
+    }
+}
+function playerMovement(event:Event):void
+{
+    // if(left is true and right is not true ... AND within stage
+    if ( left && !right && player_mc.x > 0) 
+    {
+        player_mc.x -= speed;
+    }
+
+    //if(right is true and left is not true) ... AND within stage
+    if( right && !left && player_mc.x < stage.stageWidth) 
+    {
+        player_mc.x += speed;
+    }
+
+    //if(up is true and down is not true) ... AND within stage
+    if( up && !down && player_mc.y > 0) 
+    {
+        player_mc.y -= speed;
+    }
+
+    // if(down is true and up is not true) ... AND within stage
+    if( down && !up && player_mc.y < stage.stageHeight) 
+    {
+        player_mc.y += speed;
+    }
+	if (spaceBar && cooldown <= 0) 
+{
+    addBullet(player_mc.x, player_mc.y);
+    cooldown = 8;
+	moveBullet();
+	cooldown--;
+
+}
+}
